@@ -1,3 +1,11 @@
+import Link from "next/link";
+
 export default function Page() {
-  return <h1>The Wild Oasis</h1>;
+  return (
+    <div>
+      <h1>The Wild Oasis</h1>
+
+      <Link href="/cabins">Explore Luxury Cabins</Link>
+    </div>
+  );
 }
