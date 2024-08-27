@@ -13,7 +13,7 @@ const Navigation = () => {
         <Link href="/about">About</Link>
       </li>
       <li>
-        <Link href="/account">Your account</Link>
+        <Link href="/account">Account</Link>
       </li>
     </ul>
   );
