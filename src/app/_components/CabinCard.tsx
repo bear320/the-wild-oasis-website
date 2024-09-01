@@ -1,16 +1,24 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ICabin } from "../types";
 import { UsersIcon } from "@heroicons/react/24/solid";
 
-function CabinCard({ cabin }) {
+function CabinCard({ cabin }: { cabin: Partial<ICabin> }) {
   const { id, name, maxCapacity, regularPrice, discount, image } = cabin;
 
   return (
     <div className="flex border border-primary-800">
-      <Image
-        src={image}
-        alt={`Cabin ${name}`}
-        className="flex-1 border-r border-primary-800"
-      />
+      <div className="relative flex-1">
+        <Image
+          src={image?.toString() || ""}
+          alt={`Cabin ${name}`}
+          placeholder="blur"
+          blurDataURL={image?.toString() || ""}
+          quality={80}
+          fill
+          className="border-r border-primary-800 object-cover"
+        />
+      </div>
 
       <div className="flex-grow">
         <div className="bg-primary-950 px-7 pb-4 pt-5">
@@ -26,10 +34,10 @@ function CabinCard({ cabin }) {
           </div>
 
           <p className="flex items-baseline justify-end gap-3">
-            {discount > 0 ? (
+            {discount! > 0 ? (
               <>
                 <span className="text-3xl font-[350]">
-                  ${regularPrice - discount}
+                  ${regularPrice! - discount!}
                 </span>
                 <span className="font-semibold text-primary-600 line-through">
                   ${regularPrice}
@@ -43,12 +51,12 @@ function CabinCard({ cabin }) {
         </div>
 
         <div className="border-t border-t-primary-800 bg-primary-950 text-right">
-          <a
+          <Link
             href={`/cabins/${id}`}
             className="inline-block border-l border-primary-800 px-6 py-4 transition-all hover:bg-accent-600 hover:text-primary-900"
           >
             Details & reservation &rarr;
-          </a>
+          </Link>
         </div>
       </div>
     </div>

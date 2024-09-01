@@ -1,11 +1,13 @@
 import CabinCard from "../_components/CabinCard";
+import { getCabins } from "../_lib/data-service";
+import { ICabin } from "../types";
 
 export const metadata = {
   title: "Cabins",
 };
 
 const Page = async () => {
-  const cabins = [];
+  const cabins: Partial<ICabin>[] = await getCabins();
 
   return (
     <div>
