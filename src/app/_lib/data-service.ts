@@ -20,20 +20,6 @@ export const getCabin = async (id: number) => {
   return data;
 };
 
-export const getCabinPrice = async (id: number) => {
-  const { data, error } = await supabase
-    .from("cabins")
-    .select("regularPrice, discount")
-    .eq("id", id)
-    .single();
-
-  if (error) {
-    console.error(error);
-  }
-
-  return data;
-};
-
 export const getCabins = async () => {
   const { data, error } = await supabase
     .from("cabins")
@@ -43,6 +29,20 @@ export const getCabins = async () => {
   if (error) {
     console.error(error);
     throw new Error("Cabins could not be loaded");
+  }
+
+  return data;
+};
+
+export const getCabinPrice = async (id: number) => {
+  const { data, error } = await supabase
+    .from("cabins")
+    .select("regularPrice, discount")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(error);
   }
 
   return data;
