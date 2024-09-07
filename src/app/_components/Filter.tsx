@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Capacity } from "../types";
 
 const Filter = () => {
   const searchParams = useSearchParams();
@@ -8,10 +9,9 @@ const Filter = () => {
   const pathname = usePathname();
 
   const activeFilter =
-    (searchParams.get("capacity") as "all" | "small" | "medium" | "large") ??
-    "all";
+    (searchParams.get("capacity") as Capacity) ?? Capacity.all;
 
-  const handleFilter = (filter: "all" | "small" | "medium" | "large") => {
+  const handleFilter = (filter: Capacity) => {
     const params = new URLSearchParams(searchParams);
     params.set("capacity", filter);
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
@@ -20,28 +20,28 @@ const Filter = () => {
   return (
     <div className="flex border border-primary-800">
       <Button
-        filter="all"
+        filter={Capacity.all}
         activeFilter={activeFilter}
         handleFilter={handleFilter}
       >
         All cabins
       </Button>
       <Button
-        filter="small"
+        filter={Capacity.small}
         activeFilter={activeFilter}
         handleFilter={handleFilter}
       >
         1&mdash;3 guests
       </Button>
       <Button
-        filter="medium"
+        filter={Capacity.medium}
         activeFilter={activeFilter}
         handleFilter={handleFilter}
       >
         4&mdash;6 guests
       </Button>
       <Button
-        filter="large"
+        filter={Capacity.large}
         activeFilter={activeFilter}
         handleFilter={handleFilter}
       >
@@ -58,9 +58,9 @@ const Button = ({
   handleFilter,
 }: {
   children: string;
-  filter: "all" | "small" | "medium" | "large";
-  activeFilter: "all" | "small" | "medium" | "large";
-  handleFilter: (filter: "all" | "small" | "medium" | "large") => void;
+  filter: Capacity;
+  activeFilter: Capacity;
+  handleFilter: (filter: Capacity) => void;
 }) => {
   return (
     <button
