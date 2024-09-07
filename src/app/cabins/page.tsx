@@ -1,14 +1,17 @@
 import { Suspense } from "react";
 import CabinList from "../_components/CabinList";
 import Spinner from "../_components/Spinner";
+import Filter from "../_components/Filter";
 
-export const revalidate = 3600;
+// export const revalidate = 3600; // only apply to static pages
 
 export const metadata = {
   title: "Cabins",
 };
 
-const Page = () => {
+const Page = ({ searchParams }: { searchParams?: { capacity?: string } }) => {
+  const filter = searchParams?.capacity ?? "all";
+
   return (
     <div>
       <h1 className="mb-5 text-4xl font-medium text-accent-400">
@@ -23,8 +26,12 @@ const Page = () => {
         Welcome to paradise.
       </p>
 
-      <Suspense fallback={<Spinner />}>
-        <CabinList />
+      <div className="mb-8 flex justify-end">
+        <Filter />
+      </div>
+
+      <Suspense fallback={<Spinner />} key={filter}>
+        <CabinList filter={filter} />
       </Suspense>
     </div>
   );
