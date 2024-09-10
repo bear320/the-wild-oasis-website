@@ -1,6 +1,9 @@
-const ReservationForm = () => {
-  // CHANGE
-  const maxCapacity = 23;
+"use client";
+
+import { ICabin } from "../types";
+
+const ReservationForm = ({ cabin }: { cabin: ICabin }) => {
+  const { maxCapacity } = cabin;
 
   return (
     <div className="scale-[1.01]">
