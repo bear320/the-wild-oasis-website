@@ -9,8 +9,6 @@ const Reservation = async ({ cabin }: { cabin: ICabin }) => {
     getSettings(),
   ]);
 
-  console.log(bookedDates);
-
   return (
     <div className="grid min-h-[400px] grid-cols-2 border border-primary-800">
       <DateSelector

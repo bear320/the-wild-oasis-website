@@ -1,8 +1,10 @@
 "use client";
 
 import { ICabin } from "../types";
+import { useReservation } from "./ReservationContext";
 
 const ReservationForm = ({ cabin }: { cabin: ICabin }) => {
+  const { range } = useReservation();
   const { maxCapacity } = cabin;
 
   return (
@@ -21,6 +23,10 @@ const ReservationForm = ({ cabin }: { cabin: ICabin }) => {
           <p>{user.name}</p>
         </div> */}
       </div>
+
+      <p>
+        {range.from?.toString()} to {range.to?.toString()}
+      </p>
 
       <form className="flex flex-col gap-5 bg-primary-900 px-16 py-10 text-lg">
         <div className="space-y-2">
