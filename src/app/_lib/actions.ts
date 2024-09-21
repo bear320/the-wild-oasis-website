@@ -6,4 +6,6 @@ export const signInAction = async () => {
   await signIn("google", { redirectTo: "/account" });
 };
 
-export const signOutAction = async () => {};
+export const signOutAction = async () => {
+  await signOut({ redirectTo: "/" });
+};
