@@ -1,5 +1,11 @@
-import NextAuth from "next-auth";
+import NextAuth, { User } from "next-auth";
 import Google from "next-auth/providers/google";
+import { createGuest, getGuest } from "./data-service";
+import { AdapterUser } from "next-auth/adapters";
+
+interface UserWithGuestId extends AdapterUser {
+  guestId: number;
+}
 
 export const {
   handlers: { GET, POST },
@@ -16,6 +22,26 @@ export const {
   callbacks: {
     authorized({ auth, request }) {
       return !!auth?.user;
+    },
+    async signIn({ user, account, profile }) {
+      try {
+        const existingGuest = await getGuest(user.email as string);
+
+        if (!existingGuest)
+          await createGuest({
+            email: user.email as string,
+            fullName: user.name as string,
+          });
+
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    async session({ session, user }) {
+      const guest = await getGuest(session.user.email as string);
+      (session.user as UserWithGuestId).guestId = guest.id;
+      return session;
     },
   },
   pages: {
