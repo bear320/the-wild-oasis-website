@@ -1,16 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { IGuest } from "../types";
+import { updateGuest } from "../_lib/actions";
 
-const UpdateProfileForm = ({ children }: { children: React.ReactNode }) => {
-  const [country, setCountry] = useState("Portugal");
-  const nationalFlag = "pt.jpg";
+const UpdateProfileForm = ({
+  guest,
+  children,
+}: {
+  guest: Partial<IGuest>;
+  children: React.ReactNode;
+}) => {
+  const { fullName, email, nationalID, nationality, nationalFlag } = guest;
 
   return (
-    <form className="flex flex-col gap-6 bg-primary-900 px-12 py-8 text-lg">
+    <form
+      action={updateGuest}
+      className="flex flex-col gap-6 bg-primary-900 px-12 py-8 text-lg"
+    >
       <div className="space-y-2">
         <label>Full name</label>
         <input
+          name="fullName"
+          defaultValue={fullName}
           disabled
           className="w-full rounded-sm bg-primary-200 px-5 py-3 text-primary-800 shadow-sm disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400"
         />
@@ -19,6 +30,8 @@ const UpdateProfileForm = ({ children }: { children: React.ReactNode }) => {
       <div className="space-y-2">
         <label>Email address</label>
         <input
+          name="email"
+          defaultValue={email}
           disabled
           className="w-full rounded-sm bg-primary-200 px-5 py-3 text-primary-800 shadow-sm disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400"
         />
@@ -41,6 +54,7 @@ const UpdateProfileForm = ({ children }: { children: React.ReactNode }) => {
         <label htmlFor="nationalID">National ID number</label>
         <input
           name="nationalID"
+          defaultValue={nationalID}
           className="w-full rounded-sm bg-primary-200 px-5 py-3 text-primary-800 shadow-sm"
         />
       </div>

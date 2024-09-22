@@ -1,3 +1,5 @@
+import { AdapterUser } from "next-auth/adapters";
+
 export interface IBooking {
   id: number;
   created_at: string;
@@ -88,4 +90,8 @@ export enum Capacity {
   small = "small",
   medium = "medium",
   large = "large",
+}
+
+export interface UserWithGuestId extends AdapterUser {
+  guestId: number;
 }
