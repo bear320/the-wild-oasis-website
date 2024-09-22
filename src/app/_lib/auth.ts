@@ -1,11 +1,7 @@
-import NextAuth, { User } from "next-auth";
+import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { createGuest, getGuest } from "./data-service";
-import { AdapterUser } from "next-auth/adapters";
-
-interface UserWithGuestId extends AdapterUser {
-  guestId: number;
-}
+import { UserWithGuestId } from "../types";
 
 export const {
   handlers: { GET, POST },
