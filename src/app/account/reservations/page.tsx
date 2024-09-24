@@ -1,12 +1,17 @@
 import ReservationCard from "@/app/_components/ReservationCard";
-import { IBooking } from "@/app/types";
+import { auth } from "@/app/_lib/auth";
+import { getBookings } from "@/app/_lib/data-service";
+import { IBooking, UserWithGuestId } from "@/app/types";
 
 export const metadata = {
   title: "Reservations",
 };
 
-const Page = () => {
-  const bookings: IBooking[] = [];
+const Page = async () => {
+  const session = await auth();
+  const bookings: IBooking[] = (await getBookings(
+    +(session?.user as UserWithGuestId).guestId!,
+  )) as unknown as IBooking[];
 
   return (
     <div>
