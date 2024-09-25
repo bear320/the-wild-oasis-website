@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import DeleteReservation from "../../starter/components/DeleteReservation";
+import DeleteReservation from "./DeleteReservation";
 import { format, formatDistance, isPast, isToday, parseISO } from "date-fns";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 

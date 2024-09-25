@@ -4,10 +4,9 @@ import { revalidatePath } from "next/cache";
 import { UserWithGuestId } from "../types";
 import { auth, signIn, signOut } from "./auth";
 import { supabase } from "./supabase";
+import { getBookings } from "./data-service";
 
 export const updateGuest = async (formData: FormData) => {
-  console.log("Form data: ", formData);
-
   const session = await auth();
   if (!session) throw new Error("You must be logged in!");
 
@@ -30,6 +29,31 @@ export const updateGuest = async (formData: FormData) => {
   if (error) throw new Error("Guest could not be updated");
 
   revalidatePath("/account/profile");
+};
+
+export const deleteReservation = async (bookingId: number) => {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in!");
+
+  const guestBookings = await getBookings(
+    +(session.user as UserWithGuestId).guestId!,
+  );
+  const guestBookingIds = guestBookings.map((booking) => booking.id);
+
+  if (!guestBookingIds.includes(bookingId))
+    throw new Error("You can only delete your own reservations!");
+
+  const { error } = await supabase
+    .from("bookings")
+    .delete()
+    .eq("id", bookingId);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be deleted");
+  }
+
+  revalidatePath("/account/reservations");
 };
 
 export const signInAction = async () => {
