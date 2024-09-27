@@ -3,7 +3,6 @@
 import { useTransition } from "react";
 import { deleteReservation } from "../_lib/actions";
 import { TrashIcon } from "@heroicons/react/24/solid";
-import { Span } from "next/dist/trace";
 import SpinnerMini from "./SpinnerMini";
 
 const DeleteReservation = ({ bookingId }: { bookingId: number }) => {

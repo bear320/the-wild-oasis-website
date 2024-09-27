@@ -1,10 +1,11 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { UserWithGuestId } from "../types";
 import { auth, signIn, signOut } from "./auth";
-import { supabase } from "./supabase";
 import { getBookings } from "./data-service";
+import { UserWithGuestId } from "../types";
+import { supabase } from "./supabase";
 
 export const updateGuest = async (formData: FormData) => {
   const session = await auth();
@@ -29,6 +30,38 @@ export const updateGuest = async (formData: FormData) => {
   if (error) throw new Error("Guest could not be updated");
 
   revalidatePath("/account/profile");
+};
+
+export const updateReservation = async (formData: FormData) => {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in!");
+
+  const guestBookings = await getBookings(
+    +(session.user as UserWithGuestId).guestId!,
+  );
+  const guestBookingIds = guestBookings.map((booking) => booking.id);
+
+  if (!guestBookingIds.includes(+formData.get("bookingId")!))
+    throw new Error("You can only update your own reservations!");
+
+  const { error } = await supabase
+    .from("bookings")
+    .update({
+      numGuests: +formData.get("numGuests")!,
+      observations: formData.get("observations"),
+    })
+    .eq("id", formData.get("bookingId"))
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be updated");
+  }
+
+  revalidatePath("/account/reservations");
+  revalidatePath(`/account/reservations/edit/${+formData.get("bookingId")!}`);
+  redirect("/account/reservations");
 };
 
 export const deleteReservation = async (bookingId: number) => {
