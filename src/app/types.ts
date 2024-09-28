@@ -95,3 +95,14 @@ export enum Capacity {
 export interface UserWithGuestId extends AdapterUser {
   guestId: number;
 }
+
+export interface IRange {
+  from: Date | undefined;
+  to: Date | undefined;
+}
+
+export interface IReservationContext {
+  range: IRange;
+  setRange: React.Dispatch<React.SetStateAction<IRange>>;
+  resetRange: () => void;
+}
