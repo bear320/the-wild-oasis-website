@@ -58,6 +58,8 @@ export const createReservation = async (
     console.error(error);
     throw new Error("Booking could not be created");
   }
+
+  revalidatePath(`/cabins/${bookingData.cabinId}`);
 };
 
 export const updateReservation = async (formData: FormData) => {
