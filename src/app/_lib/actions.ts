@@ -4,8 +4,9 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { auth, signIn, signOut } from "./auth";
 import { getBookings } from "./data-service";
-import { UserWithGuestId } from "../types";
+import { IBooking, UserWithGuestId } from "../types";
 import { supabase } from "./supabase";
+import { gu } from "date-fns/locale";
 
 export const updateGuest = async (formData: FormData) => {
   const session = await auth();
@@ -30,6 +31,33 @@ export const updateGuest = async (formData: FormData) => {
   if (error) throw new Error("Guest could not be updated");
 
   revalidatePath("/account/profile");
+};
+
+export const createReservation = async (
+  bookingData: any,
+  formData: FormData,
+) => {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in!");
+
+  const newBooking: Partial<IBooking> = {
+    ...bookingData,
+    guestId: +(session.user as UserWithGuestId).guestId!,
+    numGuests: +formData.get("numGuests")!,
+    observations: formData.get("observations"),
+    extrasPrice: 0,
+    totalPrice: bookingData.cabinPrice + bookingData.extrasPrice,
+    isPaid: false,
+    hasBreakfast: false,
+    status: "unconfirmed",
+  };
+
+  const { error } = await supabase.from("bookings").insert([newBooking]);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not be created");
+  }
 };
 
 export const updateReservation = async (formData: FormData) => {
