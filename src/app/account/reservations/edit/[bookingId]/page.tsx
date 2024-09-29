@@ -52,7 +52,9 @@ const Page = async ({ params }: { params: { bookingId: string } }) => {
         </div>
 
         <div className="flex items-center justify-end gap-6">
-          <SubmitButton>Update reservation</SubmitButton>
+          <SubmitButton pendingLabel="Updating...">
+            Update reservation
+          </SubmitButton>
         </div>
       </form>
     </div>

@@ -60,6 +60,7 @@ export const createReservation = async (
   }
 
   revalidatePath(`/cabins/${bookingData.cabinId}`);
+  redirect("/cabins/thanks");
 };
 
 export const updateReservation = async (formData: FormData) => {
